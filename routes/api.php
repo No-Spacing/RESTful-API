@@ -20,4 +20,4 @@ Route::post('create', [DataController::class, 'create']);
 
 Route::put('update', [DataController::class, 'update']);
 
-Route::delete('delete/{id}', [DataController::class, 'deleteUser']);
+Route::delete('delete/{id}', [DataController::class, 'delete']);
