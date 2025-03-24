@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Data;
 use Illuminate\Support\Facades\DB;
-use \Debugbar;
 use \Validator;
 
 class DataController extends Controller
