@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Data;
 use Illuminate\Support\Facades\DB;
 use \Debugbar;
+use \Validator;
 
 class DataController extends Controller
 {
@@ -20,45 +21,47 @@ class DataController extends Controller
 
     public function create(Request $request)
     {
-        $validate = $request->validate([
+        $validator = Validator::make($request->all(), [ 
             'name' => 'required|regex:/^[\pL\s]+$/u',
             'email' => 'required|email|unique:data',
-            'bdate' => 'required',   
-        ],
-        [
-            'bdate.required' => 'The Birthdate field is required.'
+            'bdate' => 'required',  
         ]);
+      
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
+        }else{
+            $data = new Data;
+            $data->name = $request->name;
+            $data->email = $request->email;
+            $data->bdate = $request->bdate;
+            $create = $data->save();
 
-        $data = new Data;
-        $data->name = $request->name;
-        $data->email = $request->email;
-        $data->bdate = $request->bdate;
-        $create = $data->save();
-
-        return response()->json($create, 201);
+            return response()->json($create, 200);
+        }           
     }
 
     public function update(Request $request)
     {
-        $request->validate([
+        $validator = Validator::make($request->all(), [ 
             'name' => 'required|regex:/^[\pL\s]+$/u',
             'email' => 'required|email|unique:data',
-            'bdate' => 'required',   
-        ],
-        [
-            'bdate.required' => 'The Birthdate field is required.'
+            'bdate' => 'required',  
         ]);
+      
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
+        }else{
+            $data = Data::find($request->id);
+            $data->name = $request->name;
+            $data->email = $request->email;
+            $data->bdate = $request->bdate;
+            $update = $data->save();
 
-        $data = Data::find($request->id);
-        $data->name = $request->name;
-        $data->email = $request->email;
-        $data->bdate = $request->bdate;
-        $update = $data->save();
-
-        return response()->json($update, 200);
+            return response()->json($update, 200);
+        }
     }
 
-    public function deleteUser($id){
+    public function delete($id){
         $data = Data::destroy($id);
         return response()->json($data, 200);
     }

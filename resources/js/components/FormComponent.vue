@@ -161,7 +161,6 @@ vertical
 export default {
     created () {
         this.getUsers();
-        console.log(this.users)
     },
     data() {
         return {
@@ -191,7 +190,7 @@ export default {
                 this.$refs.refForm.reset();
                 this.getUsers();
             }).catch(error => {
-                this.errorMessage = error.response.data.errors;
+                this.errorMessage = error.response.data;
                 this.loading = false;
             });
         },
